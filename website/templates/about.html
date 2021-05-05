@@ -1,10 +1,30 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} 
 {% block content %}
-  <h3 align='center'> About This Project </h3>
+  <div class="container" align='center'>
+    <h3 class="title"> About This Project </h3>
+    <img src="{{ url_for('static', filename='data__mining_crop2.png') }}" alt="about poster" class="about_poster padding">
+  </div>
   <div class='container about'>
     <p> I just began to actively code again with Python. To practice making WebApps I decided to go with the web framework Flask. I wanted to create useful web apps and to do this I needed DATA. I figured Wikipedia's simple layout would be the best site to practice data extraction. </p>
 
     <p>I wanted to learn how to pull data from websites and utilize useful information. I am using Python's BeautifulSoup package to introduce my self to web-scraping. BeautifulSoup can parse through a website's final output to extract useful data. </p>
+
+    <table class="padding">
+      <tr>
+        <td>
+          <img src="{{ url_for('static', filename='python_logo.png') }}" alt="python_logo" class="web_logos">
+        </td>
+        <td>
+          <img src="{{ url_for('static', filename='flask_logo.png') }}" alt="flask_logo" class="web_logos">
+        </td>
+        <td>
+          <img src="{{ url_for('static', filename='beautifulsoup_logo.png') }}" alt="beautifulsoup_logo" class="web_logos">
+        </td>
+        <td>
+          <img src="{{ url_for('static', filename='wikipedia_logo.png') }}" alt="wikipedia_logo" class="web_logos">
+        </td>
+      </tr>
+    </table>
 
     <p> One thing I learned was extracting specific data could become complicated when trying to automate the reading of long repetitive data. Even though I only read data from a Wikipedia, I did run into an issue I did not expect. </p>
 
