@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect
 import requests
 from bs4 import BeautifulSoup
 import lxml
@@ -13,6 +13,14 @@ views = Blueprint('views', __name__)
 def writefile(filename, txt):
     with open(filename, 'w') as writer:
       writer.write(str(txt))
+
+def source_cleanup(txt):
+  brack1 = txt.find('[')
+  brack2 = txt.find(']')
+  txt = txt[0:brack1-1]
+  
+  return txt
+
 
 @views.route('/')
 def home():
@@ -126,6 +134,7 @@ def fill_db():
             artist = a_album[0]
             album_name = a_album[1]
             record_label = a_album[2]
+            record_label = source_cleanup(record_label)
 
             new_album = Album(month=month_str, day=day, artist=artist, name=album_name, record_label=record_label)
             db.session.add(new_album)
@@ -142,6 +151,7 @@ def fill_db():
             artist = a_album[1]
             album_name = a_album[2]
             record_label = a_album[3]
+            record_label = source_cleanup(record_label)
 
             new_album = Album(month=month_str, day=day, artist=artist, name=album_name, record_label=record_label)
             db.session.add(new_album)
@@ -149,3 +159,21 @@ def fill_db():
   print("Sucessfully Updated DB")
   all_albums = Album.query
   return render_template('home.html', album_list=all_albums)
+
+
+@views.route('/delete')
+def delete():
+  all_albums = Album.query.delete()
+  db.session.commit()
+  all_albums = Album.query
+  return render_template('home.html', album_list=all_albums)
+
+
+@views.route('/wiki')
+def wiki():
+  return redirect('https://en.wikipedia.org/wiki/2021_in_hip_hop_music#Released_albums')
+
+@views.route('/about')
+def about():
+  
+  return render_template('about.html')

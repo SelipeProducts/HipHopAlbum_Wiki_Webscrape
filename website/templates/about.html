@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} 
+{% block content %}
+  <h3 align='center'> About This Project </h3>
+  <div class='container about'>
+    <p> I just began to actively code again with Python. To practice making WebApps I decided to go with the web framework Flask. I wanted to create useful web apps and to do this I needed DATA. I figured Wikipedia's simple layout would be the best site to practice data extraction. </p>
+
+    <p>I wanted to learn how to pull data from websites and utilize useful information. I am using Python's BeautifulSoup package to introduce my self to web-scraping. BeautifulSoup can parse through a website's final output to extract useful data. </p>
+
+    <p> One thing I learned was extracting specific data could become complicated when trying to automate the reading of long repetitive data. Even though I only read data from a Wikipedia, I did run into an issue I did not expect. </p>
+
+    <p> The issue I ran into was because of the rowspan attribute found in the td tag of the table. Each row represents an album. And that rows td tags represent different values about the album. Many of these albums where released on the same day. Instead of each row having duplicate values we use rowspan to visually overlap the first albums release day to the other albums with the same release day. </p>
+
+    <p> To work around this I assigned the creation of an album to be different when a table's rows had less then 5 collumns. If less then 5 the release day of the album would be set equal to 0. With less collumns, data related to the album had to be assigned to the db model differently. </p>
+  </div>
+{% endblock %}
+
