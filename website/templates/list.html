@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} 
 {% block content %}
   <div class="container" align="center">
-    <h3 class="title">2021 Hip Hop Album-list Pulled from 
+    <h3 class="title">Listed {{year}} Hip Hop Album-list Pulled from 
     <a href='https://en.wikipedia.org/wiki/2021_in_hip_hop_music'> Wikipedia </a> </h3>
   </div>
   
@@ -9,12 +9,12 @@
     <table>
       <tr>
         <td>
-          <form action="/fill_db" method="get">
+          <form action="/update/{{year}}" method="get">
             <input type="submit" value="Update" class="btn btn-primary">
           </form>
         </td>
         <td>
-          <form action="/delete" method="get">
+          <form action="/delete/{{year}}" method="get">
             <input type="submit" value="Delete" class="btn btn-primary">
           </form>
         </td>
@@ -30,7 +30,10 @@
     <li>
       <b>{{album.artist}}</b> 
       released <b>{{album.name}}</b> 
-      with <i>{{album.record_label}}</i> in 
+      {% if year>=2017 %}
+      with <i>{{album.record_label}}</i> 
+      {% endif %}
+      in 
       <u>{{album.month}} {{album.day}} {{album.year}}</u> 
     </li>
   {% endfor %}
