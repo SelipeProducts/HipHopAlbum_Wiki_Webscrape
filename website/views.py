@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect
+from flask import Blueprint, render_template, redirect, request
 import requests
 from bs4 import BeautifulSoup
 import lxml
@@ -7,6 +7,8 @@ from .models import Album
 from . import db
 
 import itertools
+
+from sqlalchemy import or_
 
 views = Blueprint('views', __name__)
 
@@ -35,7 +37,11 @@ def source_cleanup(txt):
 
 #Recursive function that changes dates with 0 value 
 def fix_dates(album):
-  if album.day != 0:
+  
+  if(album.day != 0 and album.month !=0):
+    album_array = [album.month, album.day]
+    return album_array
+  elif album.day != 0:
     return album.day
   else:
     album_id = album.id
@@ -141,9 +147,10 @@ def delete():
   return render_template('home.html', album_list=all_albums)
 
 #Wiki link redirects to wikipedia page
-@views.route('/wiki')
-def wiki():
-  return redirect('https://en.wikipedia.org/wiki/2021_in_hip_hop_music#Released_albums')
+@views.route('/wiki/<int:year>')
+def wiki(year):
+  url_str = 'https://en.wikipedia.org/wiki/'+str(year)+'_in_hip_hop_music#Released_albums'
+  return redirect(url_str)
 
 #About page
 @views.route('/about')
@@ -157,13 +164,14 @@ def list_all():
 
   return render_template('list_all.html', album_list=all_albums)
 
+#Gets year-specific list from db
 @views.route('/list/<int:year>')
 def list_year(year):
   album_year = Album.query.filter_by(year=year)
   
   return render_template('list.html', album_list=album_year, year=year)
 
-
+#Updates album-list based off entererd-year for 2017+
 @views.route('/update/<int:year>')
 def update_year(year):
   album_year = Album.query.filter_by(year=year).all()
@@ -247,6 +255,7 @@ def update_year(year):
 
   return render_template('list.html', album_list=album_year, year=year)
 
+#Deletes year specific hip hop lists
 @views.route('/delete/<int:year>')
 def delete_year(year):
   albums_year = Album.query.filter_by(year=year).delete()
@@ -255,6 +264,7 @@ def delete_year(year):
   albums_year = Album.query.filter_by(year=year)
   return render_template('list.html', album_list=albums_year, year=year)
 
+#U
 @views.route('/update/v2/<int:year>')
 def update_year2(year):
   album_year = Album.query.filter_by(year=year).all()
@@ -272,7 +282,7 @@ def update_year2(year):
     tables_albums = get_table_rows(main_table)
         #parsing through albums in the table
     for a_album in tables_albums:
-      print('Album length:',len(a_album))
+      #print('Album length:',len(a_album))
       if len(a_album)==0:
         pass
       elif len(a_album)<3:
@@ -310,5 +320,52 @@ def update_year2(year):
   print("Sucessfully Updated DB")
   
   album_year = Album.query.filter_by(year=year)
+  for albums in album_year:
+    albums_array = fix_dates(albums)
+    albums.month = albums_array[0]
+    albums.day = albums_array[1]
+  db.session.commit()
+  album_year = Album.query.filter_by(year=year)
 
   return render_template('list.html', album_list=album_year, year=year)
+
+
+@views.route('/search', methods=['POST', 'GET'])
+def search():
+  # album_year = Album.query.filter_by(year=year)
+  if request.method == 'POST':
+    searchwords = request.form['search']
+    sw_split = searchwords.split(' ')
+
+
+    # tag = request.form["tag"]
+    # search = "%{}%".format(tag)
+    # posts = Post.query.filter(Post.tags.like(search)).all()
+
+
+    for search_word in sw_split:
+      search_formated = "%{}%".format(search_word)
+
+      search_by_year = Album.query.filter(Album.year.like(search_formated)).all()
+      search_by_month =  Album.query.filter(Album.month.like(search_formated)).all()
+      search_by_day = Album.query.filter_by(day=search_word)
+
+      ####working!!!!!!!!!!!!!!!!!!!!!!!!!
+
+      return render_template('search.html', results=search)
+
+      # search_by_year = Album.query.filter_by(year=search_word)
+      # search_by_month = Album.query.filter_by(month=search_word)  
+      # search_by_day = Album.query.filter_by(day=search_word)  
+      
+      # search_by_artist = Album.query.filter_by(artist=search_word)
+      # search_by_album_name = Album.query.filter_by(name=search_word)
+      # search_by_record_label = Album.query.filter_by(record_label=search_word)
+      
+      # return render_template('search.html', results_year=search_by_year, results_month=search_by_month, results_day =search_by_day, results_artist=search_by_artist, results_album_name=search_by_album_name, results_record_label=search_by_record_label)
+
+
+    print(searchwords)
+
+  return render_template('search.html', results='none')
+  # return render_template('list.html', album_list=album_year, year=year)

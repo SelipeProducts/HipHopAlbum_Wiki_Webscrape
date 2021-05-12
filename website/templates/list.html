@@ -1,8 +1,7 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} 
+{% extends "base.html" %} {% block title %}List{% endblock %} 
 {% block content %}
   <div class="container" align="center">
-    <h3 class="title">Listed {{year}} Hip Hop Album-list Pulled from 
-    <a href='https://en.wikipedia.org/wiki/2021_in_hip_hop_music'> Wikipedia </a> </h3>
+    <h3 class="title">Listed {{year}} Hip Hop Album-list Pulled from Wikipedia </h3>
   </div>
   
   <div class="container" align="right">
@@ -26,11 +25,13 @@
 </div>
 
   <ol>
+  
   {% for album in album_list %}
+    
     <li>
       <b>{{album.artist}}</b> 
       released <b>{{album.name}}</b> 
-      {% if year>=2017 %}
+      {% if year|int>=2017 %}
       with <i>{{album.record_label}}</i> 
       {% endif %}
       in 

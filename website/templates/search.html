@@ -1,0 +1,17 @@
+{% extends "base.html" %} {% block title %}Search{% endblock %} 
+{% block content %}
+  <form action="/search" method="post">
+    <label for="search">
+      Search (by: date, artist, album, or date):
+    </label>
+    <input type="text" id="search" class="form-control" name="search">
+    <br><br>
+
+    <input type="submit" value="Search" class="btn btn-primary">
+  </form>
+
+  <div class='container'>
+    {{results}}
+  </div>
+{% endblock %}
+
