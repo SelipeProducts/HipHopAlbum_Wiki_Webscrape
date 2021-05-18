@@ -2,7 +2,7 @@
 {% block content %}
   <form action="/search" method="post">
     <label for="search">
-      Search (by: date, artist, album, or date):
+      <h3>Search (by: date, artist, album, or record label): </h3>
     </label>
     <input type="text" id="search" class="form-control" name="search">
     <br><br>
@@ -10,8 +10,33 @@
     <input type="submit" value="Search" class="btn btn-primary">
   </form>
 
+  <br>
+
   <div class='container'>
-    {{results}}
+    {% if results %}
+      <h5> Album Search Results: </h5>
+      <br>
+      <table>
+        <tr>
+          <th> Date </th>
+          <th> Artist </th>
+          <th> Album Name </th>
+          <th> Record Label </th>
+        </tr>
+        {% for album in results %}
+        <tr>
+          <td> {{album.month}} {{album.day}}, {{album.year}} </td>
+          <td> {{album.artist}} </td>
+          <td> {{album.name}} </td>
+          <td> {{album.record_label}} </td>
+        </tr>
+        {% endfor %}
+      </table>
+      <br>
+      <h5> Albums Selected by ID: </h5>
+      <br>
+      {{results}}
+    {% endif %}
   </div>
 {% endblock %}
 

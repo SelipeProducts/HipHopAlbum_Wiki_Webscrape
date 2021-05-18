@@ -1,39 +1,40 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} 
 {% block content %}
   <div class="container" align="center">
-    <h3 class="title">2021 Hip Hop Album-list Pulled from 
-    <a href='https://en.wikipedia.org/wiki/2021_in_hip_hop_music'> Wikipedia </a> </h3>
+    <h3 class="title">Simple Hip Hop Wiki
   </div>
   
-  <div class="container" align="right">
-    <table>
-      <tr>
-        <td>
-          <form action="/fill_db" method="get">
-            <input type="submit" value="Update" class="btn btn-primary">
-          </form>
-        </td>
-        <td>
-          <form action="/delete" method="get">
-            <input type="submit" value="Delete" class="btn btn-primary">
-          </form>
-        </td>
-      </tr>
-    </table>
-    
-    
-    
-</div>
 
-  <ol>
-  {% for album in album_list %}
+<div class='container'>
+  <ul>
     <li>
-      <b>{{album.artist}}</b> 
-      released <b>{{album.name}}</b> 
-      with <i>{{album.record_label}}</i> in 
-      <u>{{album.month}} {{album.day}} {{album.year}}</u> 
+      Find your favorite hip hop artist, albums, and record labels.
     </li>
-  {% endfor %}
-  </ol>
+    <li>
+       Find out the different dates in which hip hop music was released.
+    </li>
+    <li>
+       What happened in 2020? What ablums were released in February? What was released this day in history? 
+    </li>
+    <li>
+       Find out with simple hip-hop wiki's different features.
+    </li>
+    <li>
+       Pick a year and see a list of albums released that year.
+    </li>
+    <li>
+       Check out the Wikipedia pages where the data was scraped from.
+    </li>
+    <li>
+       Use the search page to find specific information.
+    </li>
+    <li>
+       Use this website to obtain data. With a bit of organization we can find specific information. It is up to y'all to apply your new found knowledge.
+    </li>
+
+
+
+
+</div>
   
 {% endblock %}

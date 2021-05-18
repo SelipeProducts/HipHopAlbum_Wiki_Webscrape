@@ -6,23 +6,23 @@
   </div>
   <br>
   <br>
-  <!--
+
   <div class="container" align="right">
     <table>
       <tr>
         <td>
-          <form action="/fill_db" method="get">
-            <input type="submit" value="Update" class="btn btn-primary">
+          <form action="/update_all" method="get">
+            <input type="submit" value="Update All" class="btn btn-primary">
           </form>
         </td>
         <td>
-          <form action="/delete" method="get">
-            <input type="submit" value="Delete" class="btn btn-primary">
+          <form action="/delete_all" method="get">
+            <input type="submit" value="Delete All" class="btn btn-primary">
           </form>
         </td>
       </tr>
     </table>
-</div> -->
+</div>
 
   <ol>
   {% for album in album_list %}
@@ -30,13 +30,22 @@
       <b>{{album.artist}}</b> 
       released <b>{{album.name}}</b> 
 
-      {% if album.year|int>=2017 %}
+      {% if album.year|int>=2012 %}
       with <i>{{album.record_label}}</i> 
       {% endif %}
       in 
-      <u>{{album.month}} {{album.day}} {{album.year}}</u> 
+        <u>
+        {% if album.day == 'Unknown' or album.day == 'unknown'%}
+        Unknown {{album.year}}
+        {% else %}
+          {{album.month}} {{album.day}} {{album.year}}
+        {% endif%}
+        </u>  
     </li>
   {% endfor %}
   </ol>
   
 {% endblock %}
+
+
+
