@@ -10,6 +10,8 @@ import itertools
 
 from sqlalchemy import or_
 
+import csv
+
 views = Blueprint('views', __name__)
 
 #Write to text file
@@ -1303,3 +1305,24 @@ def delete():
   db.session.commit()
   all_albums = Album.query
   return render_template('list_all.html', album_list=all_albums)
+
+
+@views.route('/export')
+def export():
+  album_all = Album.query.all()
+  write_to_csv(album_all)
+  
+  return render_template('home.html')
+
+
+def write_to_csv(album_list):
+  with open('albums.csv', mode='w') as album_file:
+    album_writer = csv.writer(album_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+
+    #writing header
+    album_writer.writerow(['Month', 'Day', 'Artist', 'Album_Name', 'Record_Label', 'Year'])
+
+    for album_indiv in album_list:
+      #writing data
+       album_writer.writerow([album_indiv.month, album_indiv.day, album_indiv.artist, album_indiv.name, album_indiv.record_label, album_indiv.year])
+
